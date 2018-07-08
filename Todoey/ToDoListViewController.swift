@@ -12,9 +12,15 @@ class ToDoListViewController: UITableViewController {
 
     var itemArray = ["Clean Sink", "Buy Apples", "Clean Shower"]
     
+    let defaults = UserDefaults.standard
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+        if let items = defaults.array(forKey: "TodoListArray") as? [String] {
+            itemArray = items
+        }
     }
 
     //MARK - TableView Datasource Methods - what cells should display, and how many rows we need
@@ -59,9 +65,10 @@ class ToDoListViewController: UITableViewController {
         
         let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
             //what will happen once the user clicks the Add Item button on our UIAlert
-            print("success")
-            print(textField.text!)
+            
             self.itemArray.append(textField.text!)
+            
+            self.defaults.set(self.itemArray, forKey: "TodoListArray")
             
             self.tableView.reloadData()
             
